@@ -11,11 +11,14 @@ export interface Todo {
 
 export interface Theme {
     id: string
+    themeName: string
+    accentColour: string
+    successColour: string
+    defaultColour: string
     backgroundColour: string
     primaryColour: string
     secondaryColour: string
     tertiaryColour: string
     textColour: string
     textColourSecondary: string
-    textColourTertiary: string
 }

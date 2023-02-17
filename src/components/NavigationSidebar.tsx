@@ -2,7 +2,7 @@ import { ThunkDispatch } from '@reduxjs/toolkit'
 import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { homeIcon, personalIcon, plusIcon, studyIcon, workIcon } from '../assets'
-import { addDir, selectAllTodos, selectDirList, setCurrentDir } from '../features/todos/todosSlice'
+import { addDir, selectAllTodos, selectCurrentTheme, selectDirList, setCurrentDir } from '../features/todos/todosSlice'
 import { Todo } from '../interfaces/interfaces'
 import TodoListDirTab from './molecule_components/TodoListDirTab'
 
@@ -14,6 +14,7 @@ const NavigationSidebar = () => {
     const dirList = useSelector(selectDirList)
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>()
     const todos = useSelector(selectAllTodos)
+    const theme = useSelector(selectCurrentTheme)
 
     const handleChangeCurrentDir = (dirName: string) => {
         dispatch(setCurrentDir(dirName.toLowerCase()))
@@ -53,7 +54,7 @@ const NavigationSidebar = () => {
                         autoFocus
                         onChange={(e) => setDirName(e.target.value)}
                         onBlur={() => setIsCreateDir(false)}
-                        onKeyDown={(e) => handleKeyDown(e)} id='createDir' type="text" className='w-full dark:bg-[#33373B] dark:text-[#B3B3B3] bg-[#EEEEEE] mt-2 px-4 py-[14px] rounded-md text-sm' />
+                        onKeyDown={(e) => handleKeyDown(e)} id='createDir' type="text" className='w-full dark:text-[#B3B3B3] mt-2 px-4 py-[14px] rounded-md text-sm' />
                 </div>
             )
         } else {
@@ -68,7 +69,7 @@ const NavigationSidebar = () => {
     }
 
     return (
-        <div className='bg-white dark:bg-[#1E1E1E] h-screen min-w-[250px] max-w-xs p-6 ml-2 mt-2 mb-2 rounded-md mr-8'>
+        <div style={{ backgroundColor: theme.primaryColour , color: theme.textColour }} className='h-screen min-w-[250px] max-w-xs p-6 ml-2 mt-2 mb-2 rounded-md mr-8'>
             <ul className='flex flex-col gap-2'>
                 {renderDirList()}
             </ul>

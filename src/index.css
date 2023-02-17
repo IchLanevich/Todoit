@@ -20,6 +20,11 @@
   -webkit-text-size-adjust: 100%;
 }
 
-body {
+/* body {
   background: linear-gradient(135deg, rgba(94, 252, 232, 0.15) 0%, rgba(106, 168, 245, 0.15) 59.37%, rgba(115, 110, 254, 0.15) 100%), #EAEBEE;
+} */
+
+.hasHoverEffect:hover {
+  background: #EAEBEE;
+  background: var(--bg-color);
 }

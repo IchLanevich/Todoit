@@ -1,5 +1,5 @@
 import { curryGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware';
-import { currentTheme, defaultThemes } from './../../data/theme';
+import { defaultThemes } from './../../data/theme';
 import { createSlice, createAsyncThunk, PayloadAction, current } from '@reduxjs/toolkit';
 import { Theme } from '../../interfaces/interfaces';
 

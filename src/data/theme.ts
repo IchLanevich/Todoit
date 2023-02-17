@@ -1,16 +1,3 @@
-
-const theme = {
-    id: '1',
-    themeName: 'light',
-    backgroundColour: '#CCCCCC',
-    primaryColour: '#FFFFFF',
-    secondaryColour: '#F2F3F5',
-    tertiaryColour: '#FFFFFF',
-    accentColour: '#4F46E5',
-    textColour: '#000000',
-    textColourSecondary: '#888888',
-}
-
 export const defaultThemes = [
     {
         id: '1',
@@ -18,8 +5,10 @@ export const defaultThemes = [
         backgroundColour: '#CCCCCC',
         primaryColour: '#FFFFFF',
         secondaryColour: '#F2F3F5',
-        tertiaryColour: '#FFFFFF',
+        tertiaryColour: '#F2F3F5',
         accentColour: '#4F46E5',
+        successColour: '#1CC322',
+        defaultColour: '#D9D9D9',
         textColour: '#000000',
         textColourSecondary: '#888888',
     },
@@ -31,20 +20,11 @@ export const defaultThemes = [
         secondaryColour: '#33373B',
         tertiaryColour: '#33373B',
         accentColour: '#4F46E5',
+        successColour: '#1CC322',
+        defaultColour: '#D9D9D9',
         textColour: '#B3B3B3',
         textColourSecondary: '#888888',
     }
 
 ]
 
-export const currentTheme = {
-    id: theme.id,
-    themeName: theme.themeName,
-    backgroundColour: theme.backgroundColour,
-    primaryColour: theme.primaryColour,
-    secondaryColour: theme.secondaryColour,
-    tertiaryColour: theme.tertiaryColour,
-    accentColour: theme.accentColour,
-    textColour: theme.textColour,
-    textColourSecondary: theme.textColourSecondary,
-}

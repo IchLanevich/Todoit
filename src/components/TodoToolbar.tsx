@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { blockIcon, listIcon, settingIcon } from '../assets'
-import { currentTheme } from '../data/theme'
 import { selectAllTodos, selectCurrentDir, selectCurrentTheme, selectUsername, setCurrentTheme, setSortByValue, setThemeState, setViewLayoutValue } from '../features/todos/todosSlice'
 import { Theme, Todo } from '../interfaces/interfaces'
 import SettingModal from './organism_components/SettingModal'
@@ -18,6 +17,7 @@ const TodoToolbar = () => {
     const todos = useSelector(selectAllTodos)
     const username = useSelector(selectUsername)
     const dispatch = useDispatch<Dispatch<AnyAction>>();
+    const theme = useSelector(selectCurrentTheme)
 
     const [sortBy, setSortBy] = useState<string>('sort-by')
     const [viewLayout, setViewLayout] = useState<string>(localStorage.getItem('viewLayout')!)
@@ -62,10 +62,11 @@ const TodoToolbar = () => {
         handleSortByChange()
     }, [sortBy])
 
-
     const handleSetTheme = (theme: string) => {
         dispatch(setCurrentTheme(theme))
     }
+
+
 
     return (
         <div id='TodoToolbar' className='flex gap-4 items-center'>
@@ -73,16 +74,17 @@ const TodoToolbar = () => {
                 <button onClick={() => handleViewChange('block-view')} className={`${handleBlockViewClass} hover:bg-slate-100 p-[11px] dark:hover:bg-[#33373B] rounded-md`} id='blockView'>{blockIcon}</button>
                 <button onClick={() => handleViewChange('list-view')} className={`${handleListViewClass} hover:bg-slate-100 p-[11px] dark:hover:bg-[#33373B] rounded-md`} id='listView'>{listIcon}</button>
             </div>
-            <select className='px-4 py-[11px] dark:text-[#B3B3B3] dark:bg-[#33373B] border-r-8 border-transparent rounded-md' name="sortTodoSelect" id="sortTodoSelect" onChange={(e) => setSortBy(e.target.value)}>
+            <select style={{ backgroundColor: theme.secondaryColour, color: theme.textColour }} className='px-4 py-[11px] dark:text-[#B3B3B3] dark:bg-[#33373B] border-r-8 border-transparent rounded-md' name="sortTodoSelect" id="sortTodoSelect" onChange={(e) => setSortBy(e.target.value)}>
                 {generateSelectOptions(selectOptions)}
             </select>
             <div className="w-full max-w-lg">
                 <label className='hidden' htmlFor="searchTodo">Search todo</label>
-                <input type="search" name="searchTodo" id="searchTodo" placeholder='Search todo'
+                <input style={{ backgroundColor: theme.secondaryColour, color: theme.textColour }} type="search" name="searchTodo" id="searchTodo" placeholder='Search todo'
                     className={`flex w-full px-4 py-[11px] rounded-md  dark:text-[#B3B3B3] dark:bg-[#33373B]`} />
             </div>
             <div className="">
-                <h2 className='p-2 font-medium flex items-center gap-3 dark:text-[#B3B3B3]'>Todo completed <span className="px-3 py-1 flex items-center justify-center w-[32px] bg-slate-100 rounded dark:bg-[#33373B] dark:text-[#88888A]">{completedTodoAmount}</span></h2>
+                <h2 style={{ color: theme.textColour }} className='p-2 font-medium flex items-center gap-3 dark:text-[#B3B3B3]'>Todo completed 
+                <span style={{ backgroundColor: theme.secondaryColour, color: theme.textColour }} className="px-3 py-1 flex items-center justify-center w-[32px] bg-slate-100 rounded dark:bg-[#33373B] dark:text-[#88888A]">{completedTodoAmount}</span></h2>
             </div>
             <div className="">
                 <button onClick={() => handleSetTheme('dark')}
