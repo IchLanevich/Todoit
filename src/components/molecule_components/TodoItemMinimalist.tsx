@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { starIcon, dueDateIcon, deleteIcon, threeDotsVerticalIcon, starIconFill } from '../assets/index.js'
+import { starIcon, dueDateIcon, deleteIcon, threeDotsVerticalIcon, starIconFill } from '../../assets/index.js'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux/es/exports'
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { addTodo, fetchTodos, deleteTodo, updateIsCompleted, updateIsImportant } from '../features/todos/todosSlice';
-import EditFormModal from './EditFormModal.js';
+import { addTodo, fetchTodos, deleteTodo, updateIsCompleted, updateIsImportant } from '../../features/todos/todosSlice';
+import EditFormModal from '../organism_components/EditFormModal.js';
 
 interface Props {
     id: string

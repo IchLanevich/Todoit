@@ -1,10 +1,10 @@
 import { ThunkDispatch } from '@reduxjs/toolkit'
 import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { homeIcon, personalIcon, plusIcon, studyIcon, workIcon } from '../assets'
-import { addDir, selectAllTodos, selectCurrentTheme, selectDirList, setCurrentDir } from '../features/todos/todosSlice'
-import { Todo } from '../interfaces/interfaces'
-import TodoListDirTab from './molecule_components/TodoListDirTab'
+import { homeIcon, personalIcon, plusIcon, studyIcon, workIcon } from '../../assets'
+import { addDir, selectAllTodos, selectCurrentTheme, selectDirList, setCurrentDir } from '../../features/todos/todosSlice'
+import { Theme, Todo } from '../../interfaces/interfaces'
+import TodoListDirTab from '../molecule_components/TodoListDirTab'
 
 
 const NavigationSidebar = () => {
@@ -14,7 +14,7 @@ const NavigationSidebar = () => {
     const dirList = useSelector(selectDirList)
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>()
     const todos = useSelector(selectAllTodos)
-    const theme = useSelector(selectCurrentTheme)
+    const theme: Theme = useSelector(selectCurrentTheme)
 
     const handleChangeCurrentDir = (dirName: string) => {
         dispatch(setCurrentDir(dirName.toLowerCase()))
@@ -52,6 +52,7 @@ const NavigationSidebar = () => {
                     <label className='hidden' htmlFor="createDir">Create new dir</label>
                     <input
                         autoFocus
+                        style={{ backgroundColor: theme.secondaryColour, color: theme.primaryTextColour }}
                         onChange={(e) => setDirName(e.target.value)}
                         onBlur={() => setIsCreateDir(false)}
                         onKeyDown={(e) => handleKeyDown(e)} id='createDir' type="text" className='w-full dark:text-[#B3B3B3] mt-2 px-4 py-[14px] rounded-md text-sm' />
@@ -60,6 +61,7 @@ const NavigationSidebar = () => {
         } else {
             return (
                 <button
+                    style={{ color: theme.primaryTextColour }}
                     onClick={() => {
                         setIsCreateDir(true);
                     }}
@@ -69,7 +71,7 @@ const NavigationSidebar = () => {
     }
 
     return (
-        <div style={{ backgroundColor: theme.primaryColour , color: theme.textColour }} className='h-screen min-w-[250px] max-w-xs p-6 ml-2 mt-2 mb-2 rounded-md mr-8'>
+        <div style={{ backgroundColor: theme.primaryColour, color: theme.textColour }} className='h-screen min-w-[250px] max-w-xs p-6 ml-2 mt-2 mb-2 rounded-md mr-8'>
             <ul className='flex flex-col gap-2'>
                 {renderDirList()}
             </ul>

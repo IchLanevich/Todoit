@@ -30,24 +30,37 @@ const TodoListDirTab: React.FC<Props> = (props: Props) => {
 
     const liRef = useRef<HTMLButtonElement>(null)
 
-    const handleHover = (ref: any, bgColor: string) => {
-        ref.current?.addEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
-        ref.current?.addEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
+    const handleHover = (ref: any, bgColor: string, currentTheme: string) => {
+        if (dirName.toLowerCase() === currentDir) {
+            ref.current.style.backgroundColor = bgColor
+        } else {
+            ref.current.style.backgroundColor = 'transparent'
+        }
+
+        ref.current.addEventListener('mouseover', () => {
+            ref.current.style.backgroundColor = bgColor
+        })
+
+        ref.current.addEventListener('mouseout', () => {
+            if (dirName.toLowerCase() === currentDir) {
+                ref.current.style.backgroundColor = bgColor
+            } else {
+                ref.current.style.backgroundColor = 'transparent'
+            }
+        })
     }
 
     useLayoutEffect(() => {
-        if (liRef) {
-            handleHover(liRef, theme.secondaryColour)
-        }
-    }, [theme])
+        handleHover(liRef, theme.secondaryColour, currentDir)
+    }, [theme, currentDir])
 
     return (
         <li onKeyDown={(e) => handleDeleteDir(dirName, e)}>
             <button ref={liRef} onClick={() => handleChangeCurrentDir(dirName)}
-                style={{ backgroundColor: theme.primaryColour, color: theme.textColour }}
+                style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }}
                 className={`flex w-full items-center gap-4 px-4 py-[14px] font-medium text-sm rounded-md dark:text-[#B3B3B3] text-black ${currentDir === dirName.toLowerCase() ? 'dark:bg-[#33373B] bg-[#F2F3F5]' : 'dark:bg-transparent bg-white'}`}>
                 {dirName}
-                <span style={{backgroundColor: theme.tertiaryColour, color: theme.textColourSecondary}} className="ml-auto px-[10px] py-1 font-semibold dark:text-[#88888A] text-[#7D7E80] dark:bg-[#3E4347] bg-[#E2E3E5] rounded">{todoAmount}</span>
+                <span style={{ backgroundColor: theme.secondaryColour, color: theme.secondaryTextColour }} className="ml-auto px-[10px] py-1 font-semibold dark:text-[#88888A] text-[#7D7E80] dark:bg-[#3E4347] bg-[#E2E3E5] rounded">{todoAmount}</span>
             </button>
             <Toaster />
         </li>

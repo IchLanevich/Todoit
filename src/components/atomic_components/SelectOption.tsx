@@ -8,8 +8,9 @@ interface SelectOptionProps {
 
 const SelectOption: React.FC<SelectOptionProps> = (props) => {
     const { value, text } = props
+
     return (
-        <option key={value} value={value.toLowerCase()}>{capitalize(text)}</option>
+        <option value={value.toLowerCase()}>{capitalize(text)}</option>
     )
 }
 

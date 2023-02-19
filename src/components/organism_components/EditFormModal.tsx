@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import { useDispatch, useSelector } from 'react-redux/es/exports'
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { addTodo, fetchTodos, selectCurrentDir, selectDirList, updateIsCompleted, updateTodo } from '../features/todos/todosSlice';
+import { addTodo, fetchTodos, selectCurrentDir, selectCurrentTheme, selectDirList, updateIsCompleted, updateTodo } from '../../features/todos/todosSlice';
 import { v4 as uuidv4 } from 'uuid'
 import { curryGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware';
 import toast, { Toaster } from 'react-hot-toast';
-import SelectOption from './atomic_components/SelectOption';
-import CheckBoxInputAndLabel from './molecule_components/CheckBoxInputAndLabel';
+import SelectOption from '../atomic_components/SelectOption';
+import CheckBoxInputAndLabel from '../molecule_components/CheckBoxInputAndLabel';
+import { Theme } from '../../interfaces/interfaces';
 
 interface EditFormModalProps {
     id: string
@@ -25,6 +26,7 @@ const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' }
 
 const EditFormModal: React.FC<EditFormModalProps> = (props: EditFormModalProps) => {
     const currentDir = useSelector(selectCurrentDir)
+    const theme: Theme = useSelector(selectCurrentTheme)
 
     const { setIsModalOpen, todo, isImportant, isCompleted, description, } = props
     const [newDueDate, setNewDueDate] = useState<any>('')
@@ -68,30 +70,34 @@ const EditFormModal: React.FC<EditFormModalProps> = (props: EditFormModalProps) 
         })
     }
 
+    useEffect(() => { }, [theme])
+
     return (
         <>
             <div id='modal-bg' onClick={(e) => handleCloseModal(e)} className='w-screen z-[0] h-screen fixed top-0 right-0 bg-black/25'></div>
-            <div id='add-todo-form-modal' className='bg-white dark:bg-[#1E1E1E] p-6 fixed z-1 inset-0 h-max max-w-lg m-auto rounded'>
+            <div style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} id='add-todo-form-modal' className=' p-6 fixed z-1 inset-0 h-max max-w-lg m-auto rounded'>
                 <form className="flex flex-col gap-4" onSubmit={(e) => handleEdit(e)}>
                     <div className="flex flex-col flex-1 gap-2">
-                        <label htmlFor="todoTask" className='text-[#313233] font-medium dark:text-[#B3B3B3]'>Todo</label>
-                        <input value={newTodo} onChange={(e) => setNewTodo(e.target.value)} className="bg-[#EEEEEE] dark:bg-[#33373B] text-[#888F92] px-3 py-2 rounded" placeholder='Enter todo' type="text" id='todoTask' />
+                        <label htmlFor="todoTask" className='font-medium'>Todo</label>
+                        <input style={{ backgroundColor: theme.secondaryColour }} value={newTodo} onChange={(e) => setNewTodo(e.target.value)} className="px-3 py-2 rounded" placeholder='Enter todo' type="text" id='todoTask' />
                     </div>
                     <div className="flex flex-col flex-1 gap-2">
-                        <label htmlFor="todoDescription" className='text-[#313233] font-medium dark:text-[#B3B3B3]'>Description</label>
-                        <textarea value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="bg-[#EEEEEE] dark:bg-[#33373B] text-[#888F92] px-3 py-2 rounded" name="todoDescription" placeholder='Enter todo description' id="todoDescription" cols={30} rows={10}></textarea>
+                        <label htmlFor="todoDescription" className='font-medium'>Description</label>
+                        <textarea style={{ backgroundColor: theme.secondaryColour }} value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="px-3 py-2 rounded" name="todoDescription" placeholder='Enter todo description' id="todoDescription" cols={30} rows={10}></textarea>
                     </div>
                     <div className="flex flex-col flex-1 gap-2">
-                        <label htmlFor="todoDueDate" className='text-[#313233] font-medium dark:text-[#B3B3B3]'>Due Date</label>
-                        <ReactDatePicker className="bg-[#EEEEEE] dark:bg-[#33373B] text-[#888F92] px-3 py-2 rounded" selected={newDueDate} onChange={(date) => setNewDueDate(date)} placeholderText={'Select due date'} />
+                        <label htmlFor="todoDueDate" className='font-medium'>Due Date</label>
+                        <div style={{ backgroundColor: theme.secondaryColour }} className="max-w-fit rounded">
+                            <ReactDatePicker className={`px-3 bg-transparent py-2 rounded`} selected={newDueDate} onChange={(date) => setNewDueDate(date)} placeholderText={'Select due date'} />
+                        </div>
                     </div>
                     <div className="flex flex-col gap-2">
                         <CheckBoxInputAndLabel checkedValue={newIsCompleted} handleOnChange={() => setNewIsCompleted(state => !state)} id={'todoIsCompleted'} text='Is Completed' />
                         <CheckBoxInputAndLabel checkedValue={newIsImportant} handleOnChange={() => setNewIsImportant(state => !state)} id={'todoIsImportant'} text='Is Important' />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="assignetAt" className='text-[#313233] font-medium dark:text-[#B3B3B3]'>Move to</label>
-                        <select className='px-3 py-2 bg-[#EEEEEE] dark:bg-[#33373B] text-[#888F92] border-r-8 border-transparent rounded-md'
+                        <label htmlFor="assignetAt" className='font-medium'>Move to</label>
+                        <select style={{ backgroundColor: theme.secondaryColour, color: theme.primaryTextColour }} className='px-3 py-2 border-r-8 border-transparent rounded-md'
                             name="assignedAt"
                             id="assignetAt"
                             value={newAssignedAt}

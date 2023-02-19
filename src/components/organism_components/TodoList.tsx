@@ -2,10 +2,10 @@ import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux/es/exports'
-import { fetchTodos, selectAllTodos, selectCurrentDir, selectSortBy, selectTodosStatus, selectViewLayout } from '../features/todos/todosSlice'
+import { fetchTodos, selectAllTodos, selectCurrentDir, selectSortBy, selectTodosStatus, selectViewLayout } from '../../features/todos/todosSlice'
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import TodoItem from './TodoItem'
-import TodoItemMinimalist from './TodoItemMinimalist'
+import TodoItem from '../molecule_components/TodoItem'
+import TodoItemMinimalist from '../molecule_components/TodoItemMinimalist'
 import { curryGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware'
 
 interface Todo {

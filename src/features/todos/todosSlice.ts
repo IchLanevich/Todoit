@@ -1,7 +1,7 @@
+import { Theme } from './../../interfaces/interfaces';
 import { curryGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware';
 import { defaultThemes } from './../../data/theme';
 import { createSlice, createAsyncThunk, PayloadAction, current } from '@reduxjs/toolkit';
-import { Theme } from '../../interfaces/interfaces';
 
 interface Todo {
   id: string
@@ -22,7 +22,7 @@ interface TodosState {
   viewLayout: string
   currentDir: string
   dirList: string[]
-  themePresets: object[]
+  themePresets: Theme[]
   currentTheme: object
   username: string
 }
@@ -148,10 +148,6 @@ const todosSlice = createSlice({
       const newDirList = state.dirList = state.dirList.filter((dir: string) => dir !== dirNameToDelete)
       localStorage.setItem('directoryList', JSON.stringify(newDirList))
     },
-    setThemeState: (state, action: PayloadAction<string>) => {
-      // state.theme = action.payload
-      // localStorage.setItem('theme', action.payload)
-    },
     setUsernameState: (state, action: PayloadAction<string>) => {
       state.username = action.payload
       localStorage.setItem('username', action.payload)
@@ -162,7 +158,12 @@ const todosSlice = createSlice({
         state.currentTheme = theme
       }
       localStorage.setItem('currentTheme', JSON.stringify(theme))
-    }
+    },
+    addThemePreset: (state, action: PayloadAction<Theme>) => {
+      const newThemePreset = [...state.themePresets, action.payload]
+      state.themePresets = newThemePreset
+      localStorage.setItem('themePresets', JSON.stringify(newThemePreset))
+    },
   },
   extraReducers(builder) {
     builder.addCase(fetchTodos.pending,
@@ -180,7 +181,7 @@ const todosSlice = createSlice({
   },
 })
 
-export const { setSortByValue, setCurrentTheme, setViewLayoutValue, setCurrentDir, addDir, deleteDir, setThemeState, setUsernameState } = todosSlice.actions
+export const { setSortByValue, setCurrentTheme, setViewLayoutValue, setCurrentDir, addDir, deleteDir, addThemePreset, setUsernameState } = todosSlice.actions
 
 export default todosSlice.reducer
 

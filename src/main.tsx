@@ -28,8 +28,6 @@ if (localStorage.getItem('currentTheme') === null) {
   console.log('currentTheme is null')
 }
 
-
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>

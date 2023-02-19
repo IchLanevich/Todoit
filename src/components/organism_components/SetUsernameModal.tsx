@@ -31,7 +31,7 @@ const SetUsernameModal = (props: any) => {
                         <label htmlFor="username" className='text-[#313233] font-medium'>Username</label>
                         <input value={username} onChange={(e) => setUsername(e.target.value)} className="bg-[#EEEEEE] text-[#888F92] px-3 py-2 rounded" placeholder='Enter your username' type="text" id='username' />
                         <div className="submit-btn-wrapper w-full">
-                            <button type="submit" className='w-full px-4 py-3 text-white bg-[#4F46E5] rounded'>Add Todo</button>
+                            <button type="submit" className='w-full px-4 py-3 text-white bg-[#4F46E5] rounded'>Set Username</button>
                         </div>
                     </form>
                 </div>
