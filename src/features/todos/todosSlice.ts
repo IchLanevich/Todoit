@@ -145,7 +145,14 @@ const todosSlice = createSlice({
     },
     deleteDir: (state, action: PayloadAction<string>) => {
       const dirNameToDelete = action.payload
-      const newDirList = state.dirList = state.dirList.filter((dir: string) => dir !== dirNameToDelete)
+      const newDirList = state.dirList.filter((dir: string) => dir !== dirNameToDelete)
+      state.dirList = newDirList
+      localStorage.setItem('directoryList', JSON.stringify(newDirList))
+    },
+    editDirName: (state, action: PayloadAction<{ dirName: string, newDirName: string }>) => {
+      const { dirName, newDirName } = action.payload
+      const dirIndex = state.dirList.findIndex((dir: string) => dir === dirName)
+      const newDirList = state.dirList[dirIndex] = newDirName
       localStorage.setItem('directoryList', JSON.stringify(newDirList))
     },
     setUsernameState: (state, action: PayloadAction<string>) => {
@@ -164,6 +171,22 @@ const todosSlice = createSlice({
       state.themePresets = newThemePreset
       localStorage.setItem('themePresets', JSON.stringify(newThemePreset))
     },
+    updateThemePreset: (state, action: PayloadAction<{updatedThemeObject: Theme, oldThemeObject: Theme}>) => {
+      const {updatedThemeObject, oldThemeObject} = action.payload
+      const themeToUpdateIndex = state.themePresets.findIndex((theme: Theme) => theme.themeName === oldThemeObject.themeName)
+      state.themePresets[themeToUpdateIndex] = updatedThemeObject
+      localStorage.setItem('themePresets', JSON.stringify(state.themePresets))
+    },
+    deleteThemePreset: (state, action: PayloadAction<string>) => {
+      const themeNameToDelete = action.payload
+      const newThemePresets = state.themePresets.filter((theme: any) => theme.themeName !== themeNameToDelete)
+      state.themePresets = newThemePresets
+      localStorage.setItem('themePresets', JSON.stringify(newThemePresets))
+    },
+    getThemePresets: (state, action: PayloadAction<any>) => {
+      const storedThemePresets = JSON.parse(localStorage.getItem('themePresets')!)
+      console.log(storedThemePresets)
+    }
   },
   extraReducers(builder) {
     builder.addCase(fetchTodos.pending,
@@ -181,7 +204,7 @@ const todosSlice = createSlice({
   },
 })
 
-export const { setSortByValue, setCurrentTheme, setViewLayoutValue, setCurrentDir, addDir, deleteDir, addThemePreset, setUsernameState } = todosSlice.actions
+export const { setSortByValue, setCurrentTheme, getThemePresets, deleteThemePreset, updateThemePreset, setViewLayoutValue, setCurrentDir, addDir, deleteDir, addThemePreset, setUsernameState, editDirName } = todosSlice.actions
 
 export default todosSlice.reducer
 

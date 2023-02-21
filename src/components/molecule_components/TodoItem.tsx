@@ -32,10 +32,7 @@ const TodoItem: React.FC<Todo> = (props: Todo) => {
         dispatch(fetchTodos())
     }
 
-    const handleDelete = async (event: any) => {
-        console.log('clicked', event)
-        event.preventDefault()
-        event.stopPropagation()
+    const handleDelete = async () => {
         await dispatch(deleteTodo(id))
         dispatch(fetchTodos())
         toast('✔️ Todo deleted', {
@@ -90,7 +87,7 @@ const TodoItem: React.FC<Todo> = (props: Todo) => {
                 <h4 style={{ color: theme.primaryTextColour }} className='flex font-medium text-lg leading-[20px] mb-2'>{todo}</h4>
                 <p style={{ color: theme.secondaryTextColour }} className='flex grow max-h-[300px] font-normal text-sm leading-[18px]'>{description ? description : 'no description'}</p>
                 <p style={{ color: theme.secondaryTextColour }} className='flex grow-0 items-center gap-3 flex-1 mb-4 font-normal text-sm leading-[18px]'>
-                    <DueDateIcon />
+                    <DueDateIcon colorProp='iconColour' />
                     {dueDate}
                 </p>
                 <div className="separator w-full h-[1px] bg-[#D3D3D3]"></div>
@@ -102,15 +99,16 @@ const TodoItem: React.FC<Todo> = (props: Todo) => {
                         checked={isCompletedChecked}
                         onChange={(e) => { handleUpdateIsCompletedChange(e) }} />
                     <label
-                        className={`select-none flex flex-1 gap-2 text-base leading-[20px] min-w-[160px] font-normal ${isCompleted ? 'text-[#18AB1E]' : 'text-[#FFF]'}`}
+                        style={{ color: isCompleted ? theme.successColour : theme.secondaryTextColour }}
+                        className={`select-none flex flex-1 gap-2 text-base leading-[20px] min-w-[160px] font-normal`}
                         htmlFor={`isCompleted${id}`}>
-                        <div className={`h-6 w-6 rounded-lg ${isCompleted ? 'bg-[#18AB1E]' : 'bg-[#D9D9D9]'}`}></div>
+                        <div style={{backgroundColor: isCompleted ? theme.successColour : theme.secondaryTextColour}} className={`h-6 w-6 rounded-lg`}></div>
                         {isCompleted ? 'completed' : 'uncompleted'}</label>
                     <div className="flex gap-2">
                         <input id={`isImportant${id}`} className='hidden' type="checkbox" checked={isImportantChecked} onChange={(e) => { handleUpdateIsImportantChange(e) }} />
                         <label ref={importantLabelRef} style={{ color: theme.iconColour }} className={`hasHoverEffect p-1 rounded`} htmlFor={`isImportant${id}`}>{isImportant ? starIconFill : starIcon}</label>
-                        {createButton((event: any) => handleDelete(event), <DeleteIcon />, deleteButtonRef)}
-                        {createButton(() => setIsModalOpen(true), <MenuIcon />, menuButtonRef)}
+                        {createButton(() => handleDelete(), <DeleteIcon colorProp='iconColour' />, deleteButtonRef)}
+                        {createButton(() => setIsModalOpen(true), <MenuIcon colorProp='iconColour' />, menuButtonRef)}
                     </div>
                 </div>
                 <Toaster />

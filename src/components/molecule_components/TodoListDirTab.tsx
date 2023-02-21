@@ -1,9 +1,12 @@
 import { ThunkDispatch } from '@reduxjs/toolkit';
-import React, { useLayoutEffect, useRef } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteDir, selectCurrentDir, selectCurrentTheme, setCurrentDir } from '../../features/todos/todosSlice';
+import { deleteDir, editDirName, selectCurrentDir, selectCurrentTheme, setCurrentDir } from '../../features/todos/todosSlice';
 import { Theme, Todo } from '../../interfaces/interfaces';
 import toast, { Toaster } from 'react-hot-toast';
+import { DeleteIcon, EditIcon } from '../atomic_components/Icons/Icons';
+import { deleteIcon, editIcon, threeDotsVerticalIcon } from '../../assets';
+import { capitalize } from '../../utils/capitalize';
 
 interface Props {
     dirName: string
@@ -22,15 +25,45 @@ const TodoListDirTab: React.FC<Props> = (props: Props) => {
     const todoAmount = getDirTodoAmount(dirName.toLowerCase(), todos)
     const currentDir = useSelector(selectCurrentDir)
 
-    const handleDeleteDir = (dirName: string, e: React.KeyboardEvent<HTMLLIElement>) => {
-        if (dirName.toLowerCase() === 'home') return toast.error('Cannot delete Home directory')
+    const [isEditDir, setIsEditDir] = useState(false)
+    const [newDirName, setNewDirName] = useState<string>(dirName)
+
+    const handleDeleteDirOnKeyDown = (dirName: string, e: any) => {
+        if (dirName.toLowerCase() === 'home') return toast('❌ Cannot delete Home directory', {
+            duration: 3000,
+            style: {
+                backgroundColor: theme.secondaryColour,
+                color: theme.primaryTextColour,
+                borderRadius: '6px',
+                fontSize: '16px',
+                boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                fontWeight: 500,
+            },
+        })
         if (e.key === 'Delete' || e.key === 'Backspace') dispatch(deleteDir(dirName.toLowerCase()))
         dispatch(setCurrentDir('home'))
     }
 
-    const liRef = useRef<HTMLButtonElement>(null)
+    const handleDeleteDirButton = (dirName: string, e: any) => {
+        if (dirName.toLowerCase() === 'home') return toast('❌ Cannot delete Home directory', {
+            duration: 3000,
+            style: {
+                backgroundColor: theme.secondaryColour,
+                color: theme.primaryTextColour,
+                borderRadius: '6px',
+                fontSize: '16px',
+                boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                fontWeight: 500,
+            },
+        })
+        e.stopPropagation()
+        dispatch(deleteDir(dirName.toLowerCase()))
+        dispatch(setCurrentDir('home'))
+    }
 
-    const handleHover = (ref: any, bgColor: string, currentTheme: string) => {
+    const liRef = useRef<HTMLLIElement>(null)
+
+    const handleHover = (ref: any, bgColor: string) => {
         if (dirName.toLowerCase() === currentDir) {
             ref.current.style.backgroundColor = bgColor
         } else {
@@ -48,22 +81,61 @@ const TodoListDirTab: React.FC<Props> = (props: Props) => {
                 ref.current.style.backgroundColor = 'transparent'
             }
         })
+
+    }
+
+    const deleteButtonRef = useRef<HTMLButtonElement>(null)
+    const editIconRef = useRef<HTMLButtonElement>(null)
+
+    const createButton = (handleFunction: any, icon: JSX.Element, ref: any) => {
+        return (<button ref={ref} style={{ color: theme.secondaryTextColour }} className='hasHoverEffect p-1 rounded' onClick={handleFunction}>{icon}</button>)
     }
 
     useLayoutEffect(() => {
-        handleHover(liRef, theme.secondaryColour, currentDir)
+        if (isEditDir === false) {
+            handleHover(liRef, theme.secondaryColour)
+            handleHover(deleteButtonRef, 'transparent')
+        }
     }, [theme, currentDir])
 
+    const handleKeyDown = (e: any) => {
+        if (e.key === 'Enter') {
+            setIsEditDir(false)
+            dispatch(editDirName({ dirName: dirName.toLowerCase(), newDirName: newDirName.toLowerCase() }))
+        }
+    }
+
+
+    const handleRenderTabAndInput = () => {
+        if (isEditDir) {
+            return (
+                <div className="" >
+                    <label className='hidden' htmlFor="editDir">Create new dir</label>
+                    <input
+                        autoFocus
+                        style={{ backgroundColor: theme.secondaryColour, color: theme.primaryTextColour }}
+                        onChange={(e) => setNewDirName(e.target.value)}
+                        onBlur={() => setIsEditDir(false)}
+                        onKeyDown={(e) => handleKeyDown(e)} id='editDir' type="text" className='w-full dark:text-[#B3B3B3] mt-2 px-4 py-[14px] rounded-md text-sm' />
+                </div >)
+        } else {
+            return (
+                <li tabIndex={0} onKeyDown={(e) => handleDeleteDirOnKeyDown(dirName, e)} ref={liRef} onClick={() => handleChangeCurrentDir(dirName)} className='flex w-full items-center rounded gap-4 px-4 py-[14px] font-medium text-sm'>
+                    <h4 style={{ color: theme.primaryTextColour }} className='flex flex-1'>{capitalize(dirName)}</h4>
+                    <div className="flex gap-1 items-center">
+                        {createButton((e: any) => handleDeleteDirButton(dirName, e), <DeleteIcon colorProp='secondaryTextColour' classProp='w-4 h-4' />, deleteButtonRef)}
+                        {createButton(() => setIsEditDir(true), <EditIcon colorProp='secondaryTextColour' classProp='w-4 h-4'/>, editIconRef)}
+                        <span style={{ backgroundColor: theme.secondaryColour, color: theme.secondaryTextColour }} className="ml-auto px-[10px] py-1 font-semibold rounded">{todoAmount}</span>
+                    </div>
+                    <Toaster />
+                </li>
+            )
+        }
+    }
     return (
-        <li onKeyDown={(e) => handleDeleteDir(dirName, e)}>
-            <button ref={liRef} onClick={() => handleChangeCurrentDir(dirName)}
-                style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }}
-                className={`flex w-full items-center gap-4 px-4 py-[14px] font-medium text-sm rounded-md dark:text-[#B3B3B3] text-black ${currentDir === dirName.toLowerCase() ? 'dark:bg-[#33373B] bg-[#F2F3F5]' : 'dark:bg-transparent bg-white'}`}>
-                {dirName}
-                <span style={{ backgroundColor: theme.secondaryColour, color: theme.secondaryTextColour }} className="ml-auto px-[10px] py-1 font-semibold dark:text-[#88888A] text-[#7D7E80] dark:bg-[#3E4347] bg-[#E2E3E5] rounded">{todoAmount}</span>
-            </button>
-            <Toaster />
-        </li>
+        <>
+            {handleRenderTabAndInput()}
+        </>
     )
 }
 

@@ -74,7 +74,7 @@ const EditFormModal: React.FC<EditFormModalProps> = (props: EditFormModalProps) 
 
     return (
         <>
-            <div id='modal-bg' onClick={(e) => handleCloseModal(e)} className='w-screen z-[0] h-screen fixed top-0 right-0 bg-black/25'></div>
+            <div id='modal-bg' onClick={(e) => handleCloseModal(e)} className='w-screen z-[0] backdrop-blur-sm h-screen fixed top-0 right-0 bg-black/25'></div>
             <div style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} id='add-todo-form-modal' className=' p-6 fixed z-1 inset-0 h-max max-w-lg m-auto rounded'>
                 <form className="flex flex-col gap-4" onSubmit={(e) => handleEdit(e)}>
                     <div className="flex flex-col flex-1 gap-2">

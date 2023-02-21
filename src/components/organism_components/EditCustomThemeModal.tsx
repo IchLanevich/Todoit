@@ -1,44 +1,52 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addThemePreset, selectCurrentTheme } from '../../features/todos/todosSlice'
+import { addThemePreset, selectCurrentTheme, selectThemePresets, setCurrentTheme, updateThemePreset } from '../../features/todos/todosSlice'
 import { Theme } from '../../interfaces/interfaces'
 import { v4 as uuidv4 } from 'uuid'
 import { blockIcon, deleteIcon, listIcon, settingIcon, starIcon, themeIcon, threeDotsVerticalIcon } from '../../assets'
 import { BlockIcon, DeleteIcon, ListIcon, SettingIcon, StarIcon, ThemeIcon } from '../atomic_components/Icons/Icons'
 
-interface AddCustomThemeModalProps {
-    setIsThemeSettingOpen: React.Dispatch<React.SetStateAction<boolean>>
+
+interface EditCustomThemeModalProps {
+    setIsEditThemePreset: React.Dispatch<React.SetStateAction<boolean>>
+    selectValue: string
 }
 
-
-
-const AddCustomThemeModal = (props: AddCustomThemeModalProps) => {
-    const { setIsThemeSettingOpen } = props
+const EditCustomThemeModal = (props: EditCustomThemeModalProps) => {
     const theme: Theme = useSelector(selectCurrentTheme)
+    const themePresets: Theme[] = useSelector(selectThemePresets)
+
+    const { setIsEditThemePreset, selectValue } = props
 
     const dispatch = useDispatch()
 
+    const themeToEdit = themePresets.find(theme => theme.themeName === selectValue)!
+
     const [newTheme, setNewTheme] = useState<Theme>({
-        id: uuidv4(),
-        themeName: '',
-        backgroundColour: '#C0C0C0',
-        primaryColour: '#FFFFFF',
-        secondaryColour: '#E6E6E6',
-        accentColour: '#4F46E5',
-        primaryTextColour: '#000000',
-        secondaryTextColour: '#888888',
-        successColour: '#10B981',
-        iconColour: '#000000'
+        id: themeToEdit.id,
+        themeName: themeToEdit.themeName,
+        backgroundColour: themeToEdit.backgroundColour,
+        primaryColour: themeToEdit.primaryColour,
+        secondaryColour: themeToEdit.secondaryColour,
+        accentColour: themeToEdit.accentColour,
+        primaryTextColour: themeToEdit.primaryTextColour,
+        secondaryTextColour: themeToEdit.secondaryTextColour,
+        successColour: themeToEdit.successColour,
+        iconColour: themeToEdit.iconColour
     })
 
     const handleCloseModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        setIsThemeSettingOpen(false)
+        setIsEditThemePreset(false)
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setIsThemeSettingOpen(false)
-        dispatch(addThemePreset(newTheme))
+        setIsEditThemePreset(false)
+        dispatch(updateThemePreset({
+            updatedThemeObject: newTheme,
+            oldThemeObject: themeToEdit
+        }))
+        dispatch(setCurrentTheme(newTheme.themeName))
     }
 
     const createColorInputAndLabel = (id: string, labelText: string, handleSetState: any, propName: string) => {
@@ -60,7 +68,7 @@ const AddCustomThemeModal = (props: AddCustomThemeModalProps) => {
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                         <div className="flex flex-col flex-1 gap-2">
                             <label htmlFor="themeName" className='font-medium'>Theme name</label>
-                            <input onChange={(e) => setNewTheme(state => ({ ...state, themeName: e.target.value }))} style={{ backgroundColor: theme.secondaryColour }} placeholder='Theme name' type="text" id='themeName' className='rounded w-full px-3 py-2' />
+                            <input value={newTheme.themeName} onChange={(e) => setNewTheme(state => ({ ...state, themeName: e.target.value.toLowerCase() }))} style={{ backgroundColor: theme.secondaryColour }} placeholder='Theme name' type="text" id='themeName' className='rounded w-full px-3 py-2' />
                         </div>
                         <div className="flex flex-col gap-4">
                             <div className="flex w-full gap-4">
@@ -133,4 +141,5 @@ const AddCustomThemeModal = (props: AddCustomThemeModalProps) => {
     )
 }
 
-export default AddCustomThemeModal
+export default EditCustomThemeModal
+

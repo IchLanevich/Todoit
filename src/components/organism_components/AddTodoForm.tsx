@@ -46,8 +46,10 @@ const AddTodoForm = () => {
         }
 
         toast('✔️ Todo added', {
-            duration: 3000,
+            duration: 1500,
             style: {
+                backgroundColor: theme.secondaryColour,
+                color: theme.primaryTextColour,
                 borderRadius: '6px',
                 fontSize: '16px',
                 boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',

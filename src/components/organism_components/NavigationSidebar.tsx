@@ -1,5 +1,6 @@
 import { ThunkDispatch } from '@reduxjs/toolkit'
 import React, { useRef, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { homeIcon, personalIcon, plusIcon, studyIcon, workIcon } from '../../assets'
 import { addDir, selectAllTodos, selectCurrentTheme, selectDirList, setCurrentDir } from '../../features/todos/todosSlice'
@@ -11,8 +12,10 @@ const NavigationSidebar = () => {
     const [isCreateDir, setIsCreateDir] = useState(false)
     const [dirName, setDirName] = useState<string>('')
 
-    const dirList = useSelector(selectDirList)
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>()
+
+    // 1
+    const dirList = useSelector(selectDirList)
     const todos = useSelector(selectAllTodos)
     const theme: Theme = useSelector(selectCurrentTheme)
 
@@ -25,23 +28,31 @@ const NavigationSidebar = () => {
         return dirTodoAmount.length
     }
 
-
-    const createTodoListDir = (dirName: string, todos: Todo[]) => {
-        return (
-            <TodoListDirTab key={dirName} dirName={dirName} todos={todos} handleChangeCurrentDir={handleChangeCurrentDir} getDirTodoAmount={getCurrentDirTodoAmount} />
-        )
-    }
-
-    const renderDirList = () => {
-        return dirList.map((dir: string) => {
-            return createTodoListDir(dir.charAt(0).toUpperCase() + dir.slice(1), todos)
+    // 2
+    const renderDirList = (todos: Todo[]) => {
+        return dirList.map((dirName: string) => {
+            return <TodoListDirTab key={dirName} dirName={dirName} todos={todos} handleChangeCurrentDir={handleChangeCurrentDir} getDirTodoAmount={getCurrentDirTodoAmount} />
         })
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && dirName) {
             setIsCreateDir(false)
+            setDirName('')
             dispatch(addDir(dirName.toLowerCase()))
+        }
+        if (event.key === 'Enter' && dirName.length === 0) {
+            toast('❌ Please enter directory name', {
+                duration: 3000,
+                style: {
+                    backgroundColor: theme.secondaryColour,
+                    color: theme.primaryTextColour,
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                    fontWeight: 500,
+                },
+            })
         }
     }
 
@@ -73,7 +84,7 @@ const NavigationSidebar = () => {
     return (
         <div style={{ backgroundColor: theme.primaryColour, color: theme.textColour }} className='h-screen min-w-[250px] max-w-xs p-6 ml-2 mt-2 mb-2 rounded-md mr-8'>
             <ul className='flex flex-col gap-2'>
-                {renderDirList()}
+                {renderDirList(todos)}
             </ul>
             {createAddListButton()}
         </div>

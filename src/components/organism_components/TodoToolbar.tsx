@@ -55,10 +55,6 @@ const TodoToolbar = () => {
         return options.map((option) => createSelectOption(option.value, option.text))
     }
 
-    const handleViewClass = (view: string) => viewLayout === view ? 'bg-slate-50 dark:bg-[#33373B]' : ''
-    const handleBlockViewClass = handleViewClass('block-view');
-    const handleListViewClass = handleViewClass('list-view');
-
     const completedTodoAmount = todos.filter((todo: Todo) => todo.assignedAt === currentDir && todo.isCompleted === true).length
 
     useEffect(() => {
@@ -71,28 +67,43 @@ const TodoToolbar = () => {
 
     const blockButtonRef = useRef<HTMLButtonElement>(null)
     const listButtonRef = useRef<HTMLButtonElement>(null)
+    const settingButtonRef = useRef<HTMLButtonElement>(null)
+    const themeButtonRef = useRef<HTMLButtonElement>(null)
 
-    const handleHover = (ref: any, bgColor: string, layout: string) => {
-        if (viewLayout === layout) {
-            ref.current.style.backgroundColor = bgColor
-        } else {
-            ref.current.style.backgroundColor = 'transparent'
-        }
-        ref.current.addEventListener('mouseover', () => {
-            ref.current.style.backgroundColor = bgColor
-        })
-        ref.current.addEventListener('mouseout', () => {
+    const handleHover = (ref: any, bgColor: string, layout?: string) => {
+        if (layout) {
             if (viewLayout === layout) {
                 ref.current.style.backgroundColor = bgColor
             } else {
                 ref.current.style.backgroundColor = 'transparent'
             }
-        })
+            ref.current.addEventListener('mouseover', () => {
+                ref.current.style.backgroundColor = bgColor
+            })
+            ref.current.addEventListener('mouseout', () => {
+                if (viewLayout === layout) {
+                    ref.current.style.backgroundColor = bgColor
+                } else {
+                    ref.current.style.backgroundColor = 'transparent'
+                }
+            })
+        } else {
+            console.log('runned')
+            ref.current?.addEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
+            ref.current?.addEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
+        }
+    }
+
+    const handleIconHover = (ref: any, bgColor: string) => {
+        ref.current?.addEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
+        ref.current?.addEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
     }
 
     useEffect(() => {
         handleHover(blockButtonRef, theme.primaryColour, 'block-view')
         handleHover(listButtonRef, theme.primaryColour, 'list-view')
+        handleIconHover(settingButtonRef, theme.primaryColour)
+        handleIconHover(themeButtonRef, theme.primaryColour)
     }, [theme, viewLayout])
 
 
@@ -100,10 +111,10 @@ const TodoToolbar = () => {
         <div id='TodoToolbar' className='flex gap-4 items-center'>
             <div className="flex gap-2">
                 <button ref={blockButtonRef} onClick={() => handleViewChange('block-view')} className={`p-[11px] dark:hover:bg-[#33373B] rounded-md`} id='blockView'>
-                    <BlockIcon />
+                    <BlockIcon colorProp='iconColour' />
                 </button>
                 <button ref={listButtonRef} onClick={() => handleViewChange('list-view')} className={`p-[11px] dark:hover:bg-[#33373B] rounded-md`} id='listView'>
-                    <ListIcon />
+                    <ListIcon colorProp='iconColour' />
                 </button>
             </div>
             <select style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className='px-4 py-[11px] dark:text-[#B3B3B3] dark:bg-[#33373B] border-r-8 border-transparent rounded-md' name="sortTodoSelect" id="sortTodoSelect" onChange={(e) => setSortBy(e.target.value)}>
@@ -119,8 +130,8 @@ const TodoToolbar = () => {
                     <span style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className="px-3 py-1 flex items-center justify-center w-[32px] bg-slate-100 rounded dark:bg-[#33373B] dark:text-[#88888A]">{completedTodoAmount}</span></h2>
             </div>
             <div className="flex">
-                <button onClick={() => setIsSettingOpen(true)} className='p-[11px] rounded-md hover:bg-slate-100'><SettingIcon /></button>
-                <button onClick={() => setIsThemeSettingOpen(true)} className='p-[11px] rounded-md hover:bg-slate-100'><ThemeIcon /></button>
+                <button ref={settingButtonRef} onClick={() => setIsSettingOpen(true)} className='p-[11px] rounded-md hover:bg-slate-100'><SettingIcon colorProp='iconColour' /></button>
+                <button ref={themeButtonRef} onClick={() => setIsThemeSettingOpen(true)} className='p-[11px] rounded-md hover:bg-slate-100'><ThemeIcon colorProp='iconColour' /></button>
                 {isSettingOpen ? <SettingModal setIsSettingOpen={setIsSettingOpen} /> : ''}
                 {isSetUsernameModalOpen ? <SetUsernameModal setIsSetUsernameModalOpen={setIsSetUsernameModalOpen} /> : ''}
                 {isThemeSettingOpen ? <AddCustomThemeModal setIsThemeSettingOpen={setIsThemeSettingOpen} /> : ''}

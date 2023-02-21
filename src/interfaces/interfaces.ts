@@ -18,7 +18,7 @@ export interface Theme {
     accentColour: string
     primaryTextColour: string
     secondaryTextColour: string
-    successColour: '#10B981',
+    successColour: string,
     iconColour: string
     [key: string]: string
 }

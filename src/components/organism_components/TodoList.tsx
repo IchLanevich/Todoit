@@ -2,11 +2,12 @@ import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux/es/exports'
-import { fetchTodos, selectAllTodos, selectCurrentDir, selectSortBy, selectTodosStatus, selectViewLayout } from '../../features/todos/todosSlice'
+import { fetchTodos, selectAllTodos, selectCurrentDir, selectCurrentTheme, selectSortBy, selectTodosStatus, selectViewLayout } from '../../features/todos/todosSlice'
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import TodoItem from '../molecule_components/TodoItem'
 import TodoItemMinimalist from '../molecule_components/TodoItemMinimalist'
 import { curryGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware'
+import { Theme } from '../../interfaces/interfaces'
 
 interface Todo {
   id: string
@@ -26,6 +27,8 @@ const TodoList: React.FC = () => {
   const sortBy = useSelector(selectSortBy)
   const viewLayout = useSelector(selectViewLayout)
   const currentDir = useSelector(selectCurrentDir)
+
+  const theme: Theme = useSelector(selectCurrentTheme)
 
   const sortByBoolean = (todos: Todo[], propertyKey: string) => {
     return [...todos].sort((a: any, b: any) => {
@@ -55,13 +58,13 @@ const TodoList: React.FC = () => {
 
 
   const renderTodoList = () => {
-    if (!todos) {
-      return <div className='text-center'>No todos</div>
+    if (todos.length === 0) {
+      return <div className='flex justify-center col-span-3 px-4 py-2 w-full h-full text-center'>
+        <h2 style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className='px-4 py-2 font-medium rounded-md'>Todos empty</h2>
+      </div>
     }
 
-
     let sortedTodos;
-
 
     switch (sortBy) {
       case 'sort-by':

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { starIcon, dueDateIcon, deleteIcon, threeDotsVerticalIcon, starIconFill } from '../../assets/index.js'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux/es/exports'
+import { useDispatch, useSelector } from 'react-redux/es/exports'
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { addTodo, fetchTodos, deleteTodo, updateIsCompleted, updateIsImportant } from '../../features/todos/todosSlice';
+import { addTodo, fetchTodos, deleteTodo, updateIsCompleted, updateIsImportant, selectCurrentTheme } from '../../features/todos/todosSlice';
 import EditFormModal from '../organism_components/EditFormModal.js';
+import { Theme } from '../../interfaces/interfaces.js';
+import { DeleteIcon, MenuIcon } from '../atomic_components/Icons/Icons.js';
 
 interface Props {
     id: string
@@ -25,6 +27,7 @@ const TodoItemMinimalist: React.FC<Props> = (props: Props) => {
 
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>()
 
+    const theme: Theme = useSelector(selectCurrentTheme)
 
     const handleUpdateIsCompletedChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         setIsCompletedChecked(e.target.checked)
@@ -43,27 +46,59 @@ const TodoItemMinimalist: React.FC<Props> = (props: Props) => {
         dispatch(fetchTodos())
     }
 
-    const createButton = (handleFunction: Function, icon: JSX.Element) => {
-        return (<button className='hover:bg-slate-100 p-1 rounded' onClick={() => handleFunction()}>{icon}</button>)
+    const deleteButtonRef = useRef<HTMLButtonElement>(null)
+    const menuButtonRef = useRef<HTMLButtonElement>(null)
+    const importantLabelRef = useRef<HTMLLabelElement>(null)
+
+    const createButton = (handleFunction: any, icon: JSX.Element, ref: any) => {
+        return (<button ref={ref} style={{ color: theme.secondaryTextColour }} className='hasHoverEffect p-1 rounded' onClick={handleFunction}>{icon}</button>)
     }
+
+    useEffect(() => {}, [theme])
+
+    const handleHover = (ref: any, bgColor: string) => {
+        ref.current?.addEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
+        ref.current?.addEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
+    }
+
+    const removeHoverListener = (ref: any, bgColor: string) => {
+        ref.current?.removeEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
+        ref.current?.removeEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
+    }
+
+
+    useLayoutEffect(() => {
+        if (deleteButtonRef) {
+            handleHover(deleteButtonRef, theme.secondaryColour)
+            removeHoverListener(deleteButtonRef, theme.secondaryColour)
+        }
+        if (menuButtonRef) {
+            handleHover(menuButtonRef, theme.secondaryColour)
+            removeHoverListener(menuButtonRef, theme.secondaryColour)
+        }
+        if (importantLabelRef) {
+            handleHover(importantLabelRef, theme.secondaryColour)
+            removeHoverListener(importantLabelRef, theme.secondaryColour)
+        }
+    }, [theme])
 
     return (
         <>
-            <div className='todo-item flex w-full items-center min-h-[76px] p-[25px] rounded-md bg-[#FFFFFF] dark:bg-[#1E1E1E]'>
+            <div style={{backgroundColor: theme.primaryColour}} className='todo-item flex w-full items-center min-h-[76px] p-[25px] rounded-md'>
                 <div className="flex">
                     <input id={`isCompleted${id}`} className='hidden' type="checkbox" checked={isCompleted} onChange={(e) => { handleUpdateIsCompletedChange(e) }} />
-                    <label className={`select-none flex gap-2 text-base leading-[20px] mr-4 font-normal ${isCompleted ? 'dark:text-[#18AB1E] text-[#1CC322]' : 'text-[#A7A7A7] '}`} htmlFor={`isCompleted${id}`}><div className={`h-6 w-6 rounded-lg ${isCompleted ? 'bg-[#1CC322] dark:bg-[#18AB1E]' : 'bg-[#D9D9D9] dark:bg-[#808080]'}`}></div></label>
+                    <label style={{backgroundColor: isCompleted ? theme.successColour : '#D9D9D9'}} className={`select-none rounded-md flex gap-2 text-base leading-[20px] mr-4 font-normal`} htmlFor={`isCompleted${id}`}><div className={`h-6 w-6 rounded-lg`}></div></label>
                 </div>
-                <h3 className={`flex ${isCompleted ? 'dark:text-[#18AB1E] text-[#1CC322] line-through' : 'dark:text-[#B3B3B3] text-[#13191b]'} flex-1 font-medium text-lg leading-[20px]`}>{todo}</h3>
+                <h3 style={{color: isCompleted ? theme.successColour : theme.primaryTextColour, textDecoration: isCompleted ? 'line-through' : ''}} className={`flex flex-1 font-medium text-lg leading-[20px]`}>{todo}</h3>
                 <div className="flex items-center">
                     <div className="flex gap-2">
-                        <p className={`flex ${dueDate ? 'dark:bg-[#33373B] bg-[#F2F2F2]' : ''} dark:text-[#B3B3B3] text-[#767676] items-center gap-3 px-2 py-1 rounded font-normal text-base`}>
+                        <p style={{backgroundColor: dueDate ? theme.secondaryColour : 'transparent', color: theme.secondaryTextColour}} className={`flex items-center gap-3 px-2 py-1 rounded font-normal text-base`}>
                             {dueDate}
                         </p>
                         <input id={`isImportant${id}`} className='hidden' type="checkbox" checked={isImportantChecked} onChange={(e) => { handleUpdateIsImportantChange(e) }} />
-                        <label className='hover:bg-slate-100 p-1 rounded' htmlFor={`isImportant${id}`}>{isImportant ? starIconFill : starIcon}</label>
-                        {createButton(() => handleDelete(), deleteIcon)}
-                        {createButton(() => setIsModalOpen(true), threeDotsVerticalIcon)}
+                        <label ref={importantLabelRef} style={{ color: theme.iconColour }} className={`hasHoverEffect p-1 rounded`} htmlFor={`isImportant${id}`}>{isImportant ? starIconFill : starIcon}</label>
+                        {createButton(() => handleDelete(), <DeleteIcon colorProp='iconColour'/>, deleteButtonRef)}
+                        {createButton(() => setIsModalOpen(true), <MenuIcon colorProp='iconColour'/>, menuButtonRef)}
                     </div>
                 </div>
             </div>
