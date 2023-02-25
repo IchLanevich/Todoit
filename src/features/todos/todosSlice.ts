@@ -42,7 +42,7 @@ const initialState: TodosState = {
 
 export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
   try {
-    const storedTodos = localStorage.getItem("todos")
+    const storedTodos = await localStorage.getItem("todos")
     const data = await JSON.parse((storedTodos)!)
     return data
   } catch (error) {
@@ -52,7 +52,7 @@ export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
 
 export const addTodo = createAsyncThunk('todos/addTodo', async (todo: Todo) => {
   try {
-    const storedTodos = localStorage.getItem("todos")
+    const storedTodos = await localStorage.getItem("todos")
     const data = JSON.parse((storedTodos)!)
     const newTodoArray = [...data, todo]
     localStorage.setItem("todos", JSON.stringify(newTodoArray))
@@ -64,7 +64,7 @@ export const addTodo = createAsyncThunk('todos/addTodo', async (todo: Todo) => {
 
 export const deleteTodo = createAsyncThunk('todos/deleteTodo', async (id: string) => {
   try {
-    const storedTodos = localStorage.getItem("todos")
+    const storedTodos = await localStorage.getItem("todos")
     const data = JSON.parse((storedTodos)!)
     const newFilteredTodoArray = data.filter((todo: Todo) => todo.id !== id)
     localStorage.setItem("todos", JSON.stringify(newFilteredTodoArray))
@@ -77,8 +77,8 @@ export const deleteTodo = createAsyncThunk('todos/deleteTodo', async (id: string
 export const updateTodo = createAsyncThunk('todos/updateTodo', async (todo: Todo) => {
   try {
     const { id }: { id: string } = todo
-    const storedTodos = localStorage.getItem("todos")
-    const data = JSON.parse((storedTodos)!)
+    const storedTodos =  await localStorage.getItem("todos")
+    const data = await JSON.parse((storedTodos)!)
     const todoIndex = data.findIndex((item: Todo) => item.id === id)
     const updatedTodo = data[todoIndex] = todo
     const newUpdatedTodoArray = data.map((todo: Todo) => {
@@ -93,8 +93,8 @@ export const updateTodo = createAsyncThunk('todos/updateTodo', async (todo: Todo
 export const updateIsCompleted = createAsyncThunk('todos/updateIsCompleted', async (todo: Todo) => {
   try {
     const { id }: { id: string } = todo
-    const storedTodos = localStorage.getItem("todos")
-    const data = JSON.parse((storedTodos)!)
+    const storedTodos = await localStorage.getItem("todos")
+    const data = await JSON.parse((storedTodos)!)
     const todoIndex = data.findIndex((item: Todo) => item.id === id)
     const updatedTodo = data[todoIndex] = todo
     const newUpdatedTodoArray = data.map((todo: Todo) => {
@@ -109,8 +109,8 @@ export const updateIsCompleted = createAsyncThunk('todos/updateIsCompleted', asy
 export const updateIsImportant = createAsyncThunk('todos/updateIsImportant', async (todo: Todo) => {
   try {
     const { id }: { id: string } = todo
-    const storedTodos = localStorage.getItem("todos")
-    const data = JSON.parse((storedTodos)!)
+    const storedTodos = await localStorage.getItem("todos")
+    const data = await JSON.parse((storedTodos)!)
     const todoIndex = data.findIndex((item: Todo) => item.id === id)
     const updatedTodo = data[todoIndex] = todo
     console.log(updatedTodo)
