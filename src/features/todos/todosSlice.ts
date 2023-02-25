@@ -53,7 +53,7 @@ export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
 export const addTodo = createAsyncThunk('todos/addTodo', async (todo: Todo) => {
   try {
     const storedTodos = await localStorage.getItem("todos")
-    const data = JSON.parse((storedTodos)!)
+    const data = await JSON.parse((storedTodos)!)
     const newTodoArray = [...data, todo]
     localStorage.setItem("todos", JSON.stringify(newTodoArray))
     return data
