@@ -48,11 +48,11 @@ const TodoList: React.FC = () => {
 
 
   const renderTodoList = () => {
-    // if (todos.length === 0) {
-    //   return <div className='flex justify-center col-span-3 px-4 py-2 w-full h-full text-center'>
-    //     <h2 style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className='px-4 py-2 font-medium rounded-md'>Todos empty</h2>
-    //   </div>
-    // }
+    if (todos.length === 0) {
+      return <div className='flex justify-center col-span-3 px-4 py-2 w-full h-full text-center'>
+        <h2 style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className='px-4 py-2 font-medium rounded-md'>Todos empty</h2>
+      </div>
+    }
 
     let sortedTodos;
 
@@ -105,7 +105,7 @@ const TodoList: React.FC = () => {
 
   return (
     <div id='todo-list' className={`${viewLayout === 'block-view' ? 'grid grid-cols-3' : 'flex flex-col'} gap-4`}>
-      {renderTodoList()}
+      {todos && renderTodoList()}
     </div>
   )
 }
