@@ -5,27 +5,21 @@ import './index.css'
 import { store } from './app/store'
 import { Provider, useSelector } from 'react-redux'
 import { defaultThemes } from './data/theme'
-import { selectCurrentTheme } from './features/todos/todosSlice'
-
 
 if (localStorage.getItem('todos') === null) {
   localStorage.setItem('todos', JSON.stringify([]))
-  console.log('todos is null')
 }
 
 if (localStorage.getItem('directoryList') === null) {
   localStorage.setItem('directoryList', JSON.stringify(['home', 'personal', 'study', 'work']))
-  console.log('directoryList is null')
 }
 
 if (localStorage.getItem('themePresets') === null) {
   localStorage.setItem('themePresets', JSON.stringify(defaultThemes))
-  console.log('themePresets is null')
 }
 
 if (localStorage.getItem('currentTheme') === null) {
   localStorage.setItem('currentTheme', JSON.stringify(defaultThemes[0]))
-  console.log('currentTheme is null')
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
