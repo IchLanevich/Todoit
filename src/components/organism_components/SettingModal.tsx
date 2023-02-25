@@ -7,7 +7,11 @@ import DivSelectOption from '../atomic_components/DivSelectOption'
 import SelectOption from '../atomic_components/SelectOption'
 import DivSelectModal from './DivSelectModal'
 
-const SettingModal = (props: any) => {
+interface SettingModalProps {
+    setIsSettingOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const SettingModal = (props: SettingModalProps ) => {
     const { setIsSettingOpen } = props
 
     const theme: Theme = JSON.parse(localStorage.getItem('currentTheme')!)

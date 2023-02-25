@@ -7,18 +7,8 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 import TodoItem from '../molecule_components/TodoItem'
 import TodoItemMinimalist from '../molecule_components/TodoItemMinimalist'
 import { curryGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware'
-import { Theme } from '../../interfaces/interfaces'
+import { Theme, Todo } from '../../interfaces/interfaces'
 
-interface Todo {
-  id: string
-  todo: string
-  dueDate: string
-  isImportant: boolean
-  isCompleted: boolean
-  description: string
-  createdAt: string
-  assignedAt: string
-}
 
 const TodoList: React.FC = () => {
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>()
@@ -90,7 +80,6 @@ const TodoList: React.FC = () => {
         break;
     }
 
-
     if (viewLayout === 'block-view') {
       return sortedTodos.map((todo: Todo) => {
         if (todo.assignedAt === currentDir) {
@@ -104,7 +93,6 @@ const TodoList: React.FC = () => {
         }
       })
     }
-
 
   }
 

@@ -1,8 +1,8 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { ChangeEventHandler, Dispatch, SetStateAction } from 'react'
 
 interface CheckboxProps {
     checkedValue: boolean;
-    handleOnChange: any;
+    handleOnChange: ChangeEventHandler<HTMLInputElement>
     id: string;
     text: string;
 }

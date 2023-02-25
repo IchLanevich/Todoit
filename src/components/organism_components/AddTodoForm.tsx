@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux/es/exports'
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -13,21 +13,21 @@ const AddTodoForm = () => {
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>()
 
     const theme: Theme = useSelector(selectCurrentTheme)
+    const currentDir = useSelector(selectCurrentDir)
 
     const [todo, setTodo] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    const [dueDate, setDueDate] = useState<any>('')
+    const [dueDate, setDueDate] = useState<string>('')
 
-    const resetInputValue = (arrayOfSetState: any[]) => {
+    const resetInputValue = (arrayOfSetState: Dispatch<SetStateAction<string>>[]) => {
         arrayOfSetState.forEach((setState) => {
             setState('')
         })
     }
-    const stateToReset = [setTodo, setDescription, setDueDate]
 
-    const currentDir = useSelector(selectCurrentDir)
+    const statesToReset = [setTodo, setDescription, setDueDate]
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if (todo) {
@@ -41,7 +41,7 @@ const AddTodoForm = () => {
                 createdAt: new Date().toISOString(),
                 assignedAt: currentDir,
             }))
-            resetInputValue(stateToReset)
+            resetInputValue(statesToReset)
             dispatch(fetchTodos())
         }
 
@@ -63,7 +63,8 @@ const AddTodoForm = () => {
         <div id='form-wrapper'>
             <div className="flex">
                 <form className="flex gap-4 w-full" onSubmit={(e) => handleSubmit(e)}>
-                    <input autoComplete='off' style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} value={todo} onChange={(e) => setTodo(e.target.value)} className="flex flex-1 rounded-md px-4 py-3 dark:bg-[#33373B] dark:text-[#88888A]" placeholder="Enter todo" type="text" name="todo" id="todo" />
+                    <label htmlFor="todo" className='hidden'>Enter todo</label>
+                    <input autoComplete='off' style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} placeholder="Enter todo" value={todo} onChange={(e) => setTodo(e.target.value)} className="flex flex-1 rounded-md px-4 py-3 dark:bg-[#33373B] dark:text-[#88888A]" type="text" name="todo" id="todo" />
                     <button style={{backgroundColor: theme.accentColour}} type="submit" className='px-4 py-3 text-white font-medium rounded-md'>Add Todo</button>
                     <Toaster />
                 </form>

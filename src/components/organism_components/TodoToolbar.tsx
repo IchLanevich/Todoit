@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { blockIcon, listIcon, settingIcon } from '../../assets'
-import { selectAllTodos, selectCurrentDir, selectCurrentTheme, selectUsername, setCurrentTheme, setSortByValue, setViewLayoutValue } from '../../features/todos/todosSlice'
+import { selectAllTodos, selectCurrentDir, selectCurrentTheme, selectUsername, selectViewLayout, setCurrentTheme, setSortByValue, setViewLayoutValue } from '../../features/todos/todosSlice'
 import { Theme, Todo } from '../../interfaces/interfaces'
 import AddCustomThemeModal from './AddCustomThemeModal'
 import SettingModal from './SettingModal'
@@ -22,10 +22,11 @@ const TodoToolbar = () => {
     const theme: Theme = useSelector(selectCurrentTheme)
 
     const [sortBy, setSortBy] = useState<string>('sort-by')
-    const [viewLayout, setViewLayout] = useState<string>(localStorage.getItem('viewLayout')!)
+    const [viewLayout, setViewLayout] = useState<string>(useSelector(selectViewLayout))
     const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false)
     const [isSetUsernameModalOpen, setIsSetUsernameModalOpen] = useState<boolean>(username === '' ? true : false)
     const [isThemeSettingOpen, setIsThemeSettingOpen] = useState<boolean>(false)
+    const [searchQuery, setSearchQuery] = useState<string>('Search todo')
 
     const currentDir = useSelector(selectCurrentDir)
 
@@ -70,34 +71,33 @@ const TodoToolbar = () => {
     const settingButtonRef = useRef<HTMLButtonElement>(null)
     const themeButtonRef = useRef<HTMLButtonElement>(null)
 
-    const handleHover = (ref: any, bgColor: string, layout?: string) => {
-        if (layout) {
+    const handleHover = (ref: React.RefObject<HTMLButtonElement>, bgColor: string, layout?: string) => {
+        if (layout && ref.current) {
             if (viewLayout === layout) {
-                ref.current.style.backgroundColor = bgColor
+                ref.current!.style.backgroundColor = bgColor
             } else {
-                ref.current.style.backgroundColor = 'transparent'
+                ref.current!.style.backgroundColor = 'transparent'
             }
             ref.current.addEventListener('mouseover', () => {
-                ref.current.style.backgroundColor = bgColor
+                ref.current!.style.backgroundColor = bgColor
             })
             ref.current.addEventListener('mouseout', () => {
-                if (viewLayout === layout) {
-                    ref.current.style.backgroundColor = bgColor
-                } else {
-                    ref.current.style.backgroundColor = 'transparent'
-                }
+                viewLayout === layout ? ref.current!.style.backgroundColor = bgColor : ref.current!.style.backgroundColor = 'transparent'
             })
         } else {
-            console.log('runned')
-            ref.current?.addEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
-            ref.current?.addEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
+            if (ref.current) {
+                ref.current!.addEventListener('mouseover', () => ref.current!.style.backgroundColor = bgColor)
+                ref.current!.addEventListener('mouseleave', () => ref.current!.style.backgroundColor = 'transparent')
+            }
         }
     }
 
-    const handleIconHover = (ref: any, bgColor: string) => {
-        ref.current?.addEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
-        ref.current?.addEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
+    const handleIconHover = (ref: React.RefObject<HTMLButtonElement>, bgColor: string) => {
+        ref.current?.addEventListener('mouseover', () => ref.current!.style.backgroundColor = bgColor)
+        ref.current?.addEventListener('mouseleave', () => ref.current!.style.backgroundColor = 'transparent')
     }
+
+    console.log(viewLayout)
 
     useEffect(() => {
         handleHover(blockButtonRef, theme.primaryColour, 'block-view')
@@ -122,7 +122,7 @@ const TodoToolbar = () => {
             </select>
             <div className="w-full max-w-lg">
                 <label className='hidden' htmlFor="searchTodo">Search todo</label>
-                <input style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} type="search" name="searchTodo" id="searchTodo" placeholder='Search todo'
+                <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onFocus={() => setSearchQuery('')} onBlur={() => setSearchQuery('Search todo')} style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} type="search" name="searchTodo" id="searchTodo"
                     className={`flex w-full px-4 py-[11px] rounded-md`} />
             </div>
             <div className="">

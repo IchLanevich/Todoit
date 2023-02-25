@@ -10,8 +10,6 @@ interface AddCustomThemeModalProps {
     setIsThemeSettingOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
-
 const AddCustomThemeModal = (props: AddCustomThemeModalProps) => {
     const { setIsThemeSettingOpen } = props
     const theme: Theme = useSelector(selectCurrentTheme)
@@ -31,7 +29,7 @@ const AddCustomThemeModal = (props: AddCustomThemeModalProps) => {
         iconColour: '#000000'
     })
 
-    const handleCloseModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const handleCloseModal = () => {
         setIsThemeSettingOpen(false)
     }
 
@@ -41,7 +39,8 @@ const AddCustomThemeModal = (props: AddCustomThemeModalProps) => {
         dispatch(addThemePreset(newTheme))
     }
 
-    const createColorInputAndLabel = (id: string, labelText: string, handleSetState: any, propName: string) => {
+    const createColorInputAndLabel = (id: string, labelText: string, handleSetState: React.Dispatch<React.SetStateAction<Theme>>, propName: string) => {
+
         return (
             <>
                 <div className="flex flex-col w-full gap-[6px]">
@@ -54,7 +53,7 @@ const AddCustomThemeModal = (props: AddCustomThemeModalProps) => {
 
     return (
         <>
-            <div id='modal-bg' onClick={(e) => handleCloseModal(e)} className='w-screen backdrop-blur-sm z-[0] h-screen fixed top-0 right-0 bg-black/50'></div>
+            <div id='modal-bg' onClick={() => handleCloseModal()} className='w-screen backdrop-blur-sm z-[0] h-screen fixed top-0 right-0 bg-black/50'></div>
             <div className="flex flex-row-reverse gap-8 p-6 fixed z-1 inset-0 h-max w-fit m-auto rounded">
                 <div style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className='p-6 w-[460px] h-fit m-auto rounded'>
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

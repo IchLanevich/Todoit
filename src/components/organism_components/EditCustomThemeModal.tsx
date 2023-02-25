@@ -49,7 +49,7 @@ const EditCustomThemeModal = (props: EditCustomThemeModalProps) => {
         dispatch(setCurrentTheme(newTheme.themeName))
     }
 
-    const createColorInputAndLabel = (id: string, labelText: string, handleSetState: any, propName: string) => {
+    const createColorInputAndLabel = (id: string, labelText: string, handleSetState: React.Dispatch<React.SetStateAction<Theme>>, propName: string) => {
         return (
             <>
                 <div className="flex flex-col w-full gap-[6px]">
@@ -68,7 +68,7 @@ const EditCustomThemeModal = (props: EditCustomThemeModalProps) => {
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                         <div className="flex flex-col flex-1 gap-2">
                             <label htmlFor="themeName" className='font-medium'>Theme name</label>
-                            <input value={newTheme.themeName} onChange={(e) => setNewTheme(state => ({ ...state, themeName: e.target.value.toLowerCase() }))} style={{ backgroundColor: theme.secondaryColour }} placeholder='Theme name' type="text" id='themeName' className='rounded w-full px-3 py-2' />
+                            <input value={newTheme.themeName} onChange={(e) => setNewTheme(state => ({ ...state, themeName: e.target.value }))} style={{ backgroundColor: theme.secondaryColour }} placeholder='Theme name' type="text" id='themeName' className='rounded w-full px-3 py-2' />
                         </div>
                         <div className="flex flex-col gap-4">
                             <div className="flex w-full gap-4">

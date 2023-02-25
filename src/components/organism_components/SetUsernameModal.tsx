@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentTheme, setUsernameState } from '../../features/todos/todosSlice'
 import { Theme } from '../../interfaces/interfaces'
 
+interface SetUsernameModalProps {
+    setIsSetUsernameModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-
-const SetUsernameModal = (props: any) => {
+const SetUsernameModal = (props: SetUsernameModalProps) => {
     const { setIsSetUsernameModalOpen } = props
 
     const dispatch = useDispatch()

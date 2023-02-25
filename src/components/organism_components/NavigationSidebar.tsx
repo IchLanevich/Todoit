@@ -14,7 +14,6 @@ const NavigationSidebar = () => {
 
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>()
 
-    // 1
     const dirList = useSelector(selectDirList)
     const todos = useSelector(selectAllTodos)
     const theme: Theme = useSelector(selectCurrentTheme)
@@ -28,7 +27,6 @@ const NavigationSidebar = () => {
         return dirTodoAmount.length
     }
 
-    // 2
     const renderDirList = (todos: Todo[]) => {
         return dirList.map((dirName: string) => {
             return <TodoListDirTab key={dirName} dirName={dirName} todos={todos} handleChangeCurrentDir={handleChangeCurrentDir} getDirTodoAmount={getCurrentDirTodoAmount} />
@@ -42,7 +40,7 @@ const NavigationSidebar = () => {
             dispatch(addDir(dirName.toLowerCase()))
         }
         if (event.key === 'Enter' && dirName.length === 0) {
-            toast('❌ Please enter directory name', {
+            return toast('❌ Please enter directory name', {
                 duration: 3000,
                 style: {
                     backgroundColor: theme.secondaryColour,

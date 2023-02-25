@@ -50,35 +50,28 @@ const TodoItemMinimalist: React.FC<Props> = (props: Props) => {
     const menuButtonRef = useRef<HTMLButtonElement>(null)
     const importantLabelRef = useRef<HTMLLabelElement>(null)
 
-    const createButton = (handleFunction: any, icon: JSX.Element, ref: any) => {
+    const createButton = (handleFunction: any, icon: JSX.Element, ref: React.RefObject<HTMLButtonElement>) => {
         return (<button ref={ref} style={{ color: theme.secondaryTextColour }} className='hasHoverEffect p-1 rounded' onClick={handleFunction}>{icon}</button>)
     }
 
     useEffect(() => {}, [theme])
 
-    const handleHover = (ref: any, bgColor: string) => {
-        ref.current?.addEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
-        ref.current?.addEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
+    const handleHover = (ref: React.RefObject<HTMLButtonElement> | React.RefObject<HTMLLabelElement>, bgColor: string) => {
+        ref.current?.addEventListener('mouseover', () => ref.current!.style.backgroundColor = bgColor)
+        ref.current?.addEventListener('mouseleave', () => ref.current!.style.backgroundColor = 'transparent')
     }
 
-    const removeHoverListener = (ref: any, bgColor: string) => {
-        ref.current?.removeEventListener('mouseover', () => ref.current.style.backgroundColor = bgColor)
-        ref.current?.removeEventListener('mouseleave', () => ref.current.style.backgroundColor = 'transparent')
-    }
 
 
     useLayoutEffect(() => {
         if (deleteButtonRef) {
             handleHover(deleteButtonRef, theme.secondaryColour)
-            removeHoverListener(deleteButtonRef, theme.secondaryColour)
         }
         if (menuButtonRef) {
             handleHover(menuButtonRef, theme.secondaryColour)
-            removeHoverListener(menuButtonRef, theme.secondaryColour)
         }
         if (importantLabelRef) {
             handleHover(importantLabelRef, theme.secondaryColour)
-            removeHoverListener(importantLabelRef, theme.secondaryColour)
         }
     }, [theme])
 

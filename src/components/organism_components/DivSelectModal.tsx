@@ -11,7 +11,7 @@ interface Props {
 const DivSelectModal = ({ setThemeVal }: Props) => {
     const theme: Theme = useSelector(selectCurrentTheme)
 
-    const themePresetNames = useSelector(selectThemePresets).map((theme: any) => theme.themeName)
+    const themePresetNames = useSelector(selectThemePresets).map((theme: Theme) => theme.themeName)
 
     const renderDivSelectOptions = (themeNames: string[]) => {
         return themeNames.map((themeName: string) => {
@@ -19,7 +19,7 @@ const DivSelectModal = ({ setThemeVal }: Props) => {
         })
     }
 
-    useEffect(() => {}, [themePresetNames])
+    useEffect(() => {}, [themePresetNames, theme])
 
     return (
         <div style={{ backgroundColor: theme.secondaryColour, border: `1px solid ${theme.secondaryTextColour}` }} className="flex flex-col w-full max-h-40 overflow-y-scroll border rounded absolute">
