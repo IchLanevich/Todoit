@@ -16,7 +16,7 @@ const Greeting = () => {
         return dirTodoAmount.length
     }
 
-    const todoAmount = getCurrentDirTodoAmount(currentDir, todos)
+    const todoAmount = todos ? getCurrentDirTodoAmount(currentDir, todos) : 0
 
     useEffect(() => {
     }, [theme])

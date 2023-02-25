@@ -56,7 +56,13 @@ const TodoToolbar = () => {
         return options.map((option) => createSelectOption(option.value, option.text))
     }
 
-    const completedTodoAmount = todos.filter((todo: Todo) => todo.assignedAt === currentDir && todo.isCompleted === true).length
+    const getTodosLength = (todos: Todo[]) => {
+        if (todos) {
+            return todos.filter((todo: Todo) => todo.assignedAt === currentDir && todo.isCompleted === true).length
+        }
+    }
+
+    const completedTodoAmount = todos ? getTodosLength(todos) : 0
 
     useEffect(() => {
         handleSortByChange()
@@ -96,8 +102,6 @@ const TodoToolbar = () => {
         ref.current?.addEventListener('mouseover', () => ref.current!.style.backgroundColor = bgColor)
         ref.current?.addEventListener('mouseleave', () => ref.current!.style.backgroundColor = 'transparent')
     }
-
-    console.log(viewLayout)
 
     useEffect(() => {
         handleHover(blockButtonRef, theme.primaryColour, 'block-view')
