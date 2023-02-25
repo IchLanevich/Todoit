@@ -43,7 +43,8 @@ const initialState: TodosState = {
 export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
   try {
     const storedTodos = await localStorage.getItem("todos")
-    // const data = await JSON.parse((storedTodos)!)
+    const data = await JSON.parse((storedTodos)!)
+    return data
   } catch (error) {
     console.log(error)
   }
