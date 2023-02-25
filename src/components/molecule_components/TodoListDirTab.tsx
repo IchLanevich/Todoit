@@ -12,7 +12,7 @@ interface Props {
     dirName: string
     todos: Todo[]
     handleChangeCurrentDir: (dirName: string) => void
-    getDirTodoAmount: (dirName: string, todos: Todo[]) => number
+    getDirTodoAmount: (dirName: string, todos: Todo[]) => number | undefined
 }
 
 const TodoListDirTab: React.FC<Props> = (props: Props) => {
@@ -45,7 +45,7 @@ const TodoListDirTab: React.FC<Props> = (props: Props) => {
     }
 
     const handleDeleteDirButton = (dirName: string, e: any) => {
-        if (dirName.toLowerCase() === 'home') return toast('❌ Cannot delete Home directory', {
+        if (dirName?.toLowerCase() === 'home') return toast('❌ Cannot delete Home directory', {
             duration: 3000,
             style: {
                 backgroundColor: theme.secondaryColour,
@@ -132,9 +132,10 @@ const TodoListDirTab: React.FC<Props> = (props: Props) => {
             )
         }
     }
+
     return (
         <>
-            {handleRenderTabAndInput()}
+            {currentDir && handleRenderTabAndInput()}
         </>
     )
 }

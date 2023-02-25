@@ -23,8 +23,10 @@ const NavigationSidebar = () => {
     }
 
     const getCurrentDirTodoAmount = (dirName: string, todos: Todo[]) => {
-        const dirTodoAmount = todos.filter((todo) => todo.assignedAt === dirName)
-        return dirTodoAmount.length
+        if (todos) {
+            const dirTodoAmount = todos.filter((todo) => todo.assignedAt === dirName)
+            return dirTodoAmount.length
+        }
     }
 
     const renderDirList = (todos: Todo[]) => {

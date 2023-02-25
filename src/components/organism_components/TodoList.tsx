@@ -6,7 +6,6 @@ import { fetchTodos, selectAllTodos, selectCurrentDir, selectCurrentTheme, selec
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import TodoItem from '../molecule_components/TodoItem'
 import TodoItemMinimalist from '../molecule_components/TodoItemMinimalist'
-import { curryGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware'
 import { Theme, Todo } from '../../interfaces/interfaces'
 
 
