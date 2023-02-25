@@ -48,11 +48,11 @@ const TodoList: React.FC = () => {
 
 
   const renderTodoList = () => {
-    if (todos.length === 0) {
-      return <div className='flex justify-center col-span-3 px-4 py-2 w-full h-full text-center'>
-        <h2 style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className='px-4 py-2 font-medium rounded-md'>Todos empty</h2>
-      </div>
-    }
+    // if (todos.length === 0) {
+    //   return <div className='flex justify-center col-span-3 px-4 py-2 w-full h-full text-center'>
+    //     <h2 style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} className='px-4 py-2 font-medium rounded-md'>Todos empty</h2>
+    //   </div>
+    // }
 
     let sortedTodos;
 
