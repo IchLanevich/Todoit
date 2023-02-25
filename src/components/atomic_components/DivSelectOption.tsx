@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteThemePreset, getThemePresets, selectCurrentTheme, selectThemePresets, setCurrentTheme } from '../../features/todos/todosSlice'
+import { deleteThemePreset, selectCurrentTheme, selectThemePresets, setCurrentTheme } from '../../features/todos/todosSlice'
 import { Theme } from '../../interfaces/interfaces'
 import { capitalize } from '../../utils/capitalize'
 import EditCustomThemeModal from '../organism_components/EditCustomThemeModal'

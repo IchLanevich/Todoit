@@ -35,7 +35,7 @@ const initialState: TodosState = {
   viewLayout: localStorage.getItem('viewLayout') || 'block-view',
   currentDir: 'home',
   dirList: JSON.parse(localStorage.getItem('directoryList')!) || ['home', 'personal', 'study', 'work'],
-  themePresets: JSON.parse(localStorage.getItem('themePresets')!),
+  themePresets: JSON.parse(localStorage.getItem('themePresets')!) || defaultThemes,
   currentTheme: JSON.parse(localStorage.getItem('currentTheme')!) || defaultThemes[0],
   username: localStorage.getItem('username') || ''
 }
@@ -183,10 +183,6 @@ const todosSlice = createSlice({
       state.themePresets = newThemePresets
       localStorage.setItem('themePresets', JSON.stringify(newThemePresets))
     },
-    getThemePresets: (state, action: PayloadAction<any>) => {
-      const storedThemePresets = JSON.parse(localStorage.getItem('themePresets')!)
-      console.log(storedThemePresets)
-    }
   },
   extraReducers(builder) {
     builder.addCase(fetchTodos.pending,
@@ -204,7 +200,7 @@ const todosSlice = createSlice({
   },
 })
 
-export const { setSortByValue, setCurrentTheme, getThemePresets, deleteThemePreset, updateThemePreset, setViewLayoutValue, setCurrentDir, addDir, deleteDir, addThemePreset, setUsernameState, editDirName } = todosSlice.actions
+export const { setSortByValue, setCurrentTheme, deleteThemePreset, updateThemePreset, setViewLayoutValue, setCurrentDir, addDir, deleteDir, addThemePreset, setUsernameState, editDirName } = todosSlice.actions
 
 export default todosSlice.reducer
 
