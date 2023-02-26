@@ -82,7 +82,7 @@ const NavigationSidebar = () => {
     }
 
     return (
-        <div style={{ backgroundColor: theme.primaryColour, color: theme.textColour }} className='h-screen min-w-[250px] max-w-xs p-6 ml-2 mt-2 mb-2 rounded-md mr-8'>
+        <div style={{ backgroundColor: theme.primaryColour, color: theme.textColour }} className='h-screen overflow-y-auto min-w-[250px] max-w-xs p-6 ml-2 mt-2 mb-2 rounded-md mr-8'>
             <ul className='flex flex-col gap-2'>
                 {renderDirList(todos)}
             </ul>

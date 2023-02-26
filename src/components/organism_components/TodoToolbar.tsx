@@ -26,7 +26,7 @@ const TodoToolbar = () => {
     const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false)
     const [isSetUsernameModalOpen, setIsSetUsernameModalOpen] = useState<boolean>(username === '' ? true : false)
     const [isThemeSettingOpen, setIsThemeSettingOpen] = useState<boolean>(false)
-    const [searchQuery, setSearchQuery] = useState<string>('Search todo')
+    const [searchQuery, setSearchQuery] = useState<string>('')
 
     const currentDir = useSelector(selectCurrentDir)
 
@@ -126,7 +126,7 @@ const TodoToolbar = () => {
             </select>
             <div className="w-full max-w-lg">
                 <label className='hidden' htmlFor="searchTodo">Search todo</label>
-                <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onFocus={() => setSearchQuery('')} onBlur={() => setSearchQuery('Search todo')} style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} type="search" name="searchTodo" id="searchTodo"
+                <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder='Search todo' style={{ backgroundColor: theme.primaryColour, color: theme.primaryTextColour }} type="search" name="searchTodo" id="searchTodo"
                     className={`flex w-full px-4 py-[11px] rounded-md`} />
             </div>
             <div className="">
